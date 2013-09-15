@@ -1,10 +1,9 @@
 package com.raidzero.androidium;
 
 import android.content.Intent;
-import android.util.Log;
 
 /**
- * Created by raidzero on 9/11/13.
+ * Created by raidzero on 9/11/13. Updated 9/5/13 12:38 PM
  */
 public class ListItem extends HomeActivity {
     private String item_name;

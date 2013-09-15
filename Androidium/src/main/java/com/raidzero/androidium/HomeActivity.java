@@ -14,14 +14,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.*;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class HomeActivity extends Activity {
-
-
-    static final String[] ITEMS = new String[] { "phone", "people", "messages",
-            "e-mail", "weather", "applications", "calculator", "camera",
-            "pictures", "music", "finances", "internet", "calendar", "play" };
 
     private boolean missedNumbers_enabled;
     private static final Boolean debug = false;
@@ -125,7 +119,7 @@ public class HomeActivity extends Activity {
                             i.addCategory(Intent.CATEGORY_LAUNCHER);
                             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
                         } else {
-                             // do not run the app drawer in the main thread
+                             // do not run the app drawer in the main thread, I think :)
                             new Thread(new Runnable() {
                                 public void run() {
                                     startActivity(i);
@@ -190,9 +184,13 @@ public class HomeActivity extends Activity {
     // animation for a view
     public void animateTouch(View v) {
         Animation touchEffectOut = AnimationUtils.loadAnimation(this, R.anim.item_touch_fadeout);
-        v.startAnimation(touchEffectOut);
+        if (touchEffectOut != null) {
+            v.startAnimation(touchEffectOut);
+        }
         Animation touchEffectIn = AnimationUtils.loadAnimation(this, R.anim.item_touch_fadein);
-        v.startAnimation(touchEffectIn);
+        if (touchEffectIn != null) {
+            v.startAnimation(touchEffectIn);
+        }
     }
 
     // open menu
@@ -266,7 +264,7 @@ public class HomeActivity extends Activity {
     @Override
     public void onBackPressed() {
         updateView();
-        return; // do nothing, we are already home, cant go any further
+        // do nothing, we are already home, cant go any further
     }
 
     @Override public void onPause() {
