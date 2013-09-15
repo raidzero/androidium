@@ -1,0 +1,22 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/action_settings"
+        android:title="@string/action_settings"
+        android:orderInCategory="100"
+        android:showAsAction="never" />
+    <item android:id="@+id/action_android_settings"
+          android:title="@string/action_android_settings"
+          android:orderInCategory="100"
+          android:showAsAction="never" />
+    <item android:id="@+id/action_manage_apps"
+          android:title="@string/action_manage_apps"
+          android:orderInCategory="100"
+          android:showAsAction="never" />
+    <item android:id="@+id/action_wallpaper"
+          android:title="@string/action_wallpaper"
+          android:orderInCategory="100"
+          android:showAsAction="never" />
+    <item android:id="@+id/action_add"
+          android:title="@string/action_add"
+          android:orderInCategory="100"
+          android:showAsAction="never" />
+</menu>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Androidium</string>
+    <string name="action_settings">Androidium Preferences</string>
+    <string name="action_android_settings">Android Settings</string>
+    <string name="action_manage_apps">Manage Applications</string>
+    <string name="action_wallpaper">Wallpaper</string>
+    <string name="action_add">Add</string>
+
+    <string name="home_title">Home Sample</string>
+    <string name="show_all_apps">All</string>
+
+</resources>

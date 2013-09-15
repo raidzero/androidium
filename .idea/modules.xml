@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Androidium/Androidium.iml" filepath="$PROJECT_DIR$/Androidium/Androidium.iml" />
+      <module fileurl="file://$PROJECT_DIR$/AndroidiumProject.iml" filepath="$PROJECT_DIR$/AndroidiumProject.iml" />
+    </modules>
+  </component>
+</project>
+
