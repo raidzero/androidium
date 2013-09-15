@@ -1,40 +1,32 @@
 package com.raidzero.androidium;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.util.Log;
 
 /**
  * Created by raidzero on 9/11/13.
  */
-public class ListItem extends Activity {
-    private static final String tag = "Androidium";
+public class ListItem extends HomeActivity {
     private String item_name;
-    private Intent launchIntent;
-    private String uri;
     private String pkgName;
     private String activityName;
+    private Boolean visible = true;
 
-    // simple Constructor
-    public ListItem(String name, Intent i) {
+    public ListItem(String name, String pkg, String activity) {
         this.item_name = name;
-        this.launchIntent = i;
-    }
-
-    // uri based constructor
-    public ListItem(String name, Intent i, String uri) {
-        this.item_name = name;
-        this.launchIntent = i;
-        this.uri = uri;
-    }
-
-    // class based
-    public ListItem(String name, Intent i, String pkg, String activity) {
-        this.item_name = name;
-        this.launchIntent = i;
         this.pkgName = pkg;
         this.activityName = activity;
+    }
+
+    public void setVisible(Boolean b)
+    {
+        visible = b;
+        logWrapper(this.getItemName() + " visible: " + visible );
+    }
+
+    public Boolean isVisible()
+    {
+        return visible;
     }
 
     public String getItemName() {
@@ -42,13 +34,10 @@ public class ListItem extends Activity {
     }
 
     public Intent getLaunchIntent() {
-        Log.d(tag, this.getItemName() + ".getLaunchIntent() called");
-        if (uri != null && !uri.isEmpty()) { // launch activity from uri parser
-            Log.d(tag, "setting Uri to " + uri);
-            launchIntent.setData(Uri.parse(uri));
-        } else if (pkgName != null && activityName != null && !pkgName.isEmpty() && !activityName.isEmpty()) { // launch an activity by package/activity name
-            launchIntent.setClassName(pkgName, activityName);
-        }
+        logWrapper(this.getItemName() + ".getLaunchIntent() called");
+
+        Intent launchIntent = new Intent();
+        launchIntent.setClassName(pkgName, activityName);
         return launchIntent;
     }
 }
