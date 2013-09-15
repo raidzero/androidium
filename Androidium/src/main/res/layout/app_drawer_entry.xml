@@ -41,5 +41,6 @@
         android:id="@+id/app_drawer_entry_name"
         android:textColor="@android:color/white"
         android:paddingBottom="10dp"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:lines="2"/>
 </LinearLayout>
