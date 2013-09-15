@@ -121,10 +121,11 @@ public class HomeActivity extends Activity {
                     Intent i = listItems[id].getLaunchIntent();
                     Log.d(tag, "Recieved launch intent for " + listItems[id].getItemName());
                     try {
-                        i.setAction(Intent.ACTION_MAIN);
-                        i.addCategory(Intent.CATEGORY_LAUNCHER);
-                        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-
+                        if (!listItems[id].getItemName().equals("applications")) {
+                            i.setAction(Intent.ACTION_MAIN);
+                            i.addCategory(Intent.CATEGORY_LAUNCHER);
+                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+                        }
                         startActivity(i);
                     } catch (Exception e) {
                         // tell the user what happened
