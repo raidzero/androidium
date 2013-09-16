@@ -102,7 +102,14 @@ public class AppDrawer extends Activity {
         private void bindView(int position, View v) {
             TextView label = (TextView) v.findViewById(R.id.app_drawer_entry_name);
 
-            label.setText(getItem(position).loadLabel(pm)); // set the text label
+            CharSequence appLabelText = getItem(position).loadLabel(pm);
+
+            // DynamicNotifications label looks bad since there's no space. let's fix that :)
+            if (appLabelText.toString().equals("DynamicNotifications")) {
+                appLabelText = "Dynamic Notifications"; //
+            }
+
+            label.setText(appLabelText); // set the text label
 
             ImageView icon = (ImageView) v.findViewById(R.id.app_drawer_entry_icon);
 

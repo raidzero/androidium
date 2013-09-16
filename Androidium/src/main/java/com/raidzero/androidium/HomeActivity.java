@@ -19,6 +19,8 @@
 package com.raidzero.androidium;
 
 import android.app.Activity;
+import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -55,6 +57,7 @@ public class HomeActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.home_scroll);
+
 
         layout = (LinearLayout) findViewById(R.id.llayout);
 
@@ -126,6 +129,7 @@ public class HomeActivity extends Activity {
             View.OnClickListener clickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     animateTouch(v);
                     int id = v.getId();
                     logWrapper("ID clicked: " + id);
