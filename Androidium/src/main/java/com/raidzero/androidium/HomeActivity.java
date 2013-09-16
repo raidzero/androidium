@@ -19,8 +19,6 @@
 package com.raidzero.androidium;
 
 import android.app.Activity;
-import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -50,7 +48,9 @@ public class HomeActivity extends Activity {
     final ArrayList<ListItem> listItems = new ArrayList<ListItem>();
     final ArrayList<String> itemsDisplayed = new ArrayList<String>();
 
-    LinearLayout layout;
+    private LinearLayout layout;
+    private HomeView homeView;
+    public static TextView center;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +58,12 @@ public class HomeActivity extends Activity {
 
         setContentView(R.layout.home_scroll);
 
+        homeView = (HomeView) findViewById(R.id.home_view);
+
+        homeView.setOverScrollMode(View.OVER_SCROLL_NEVER); // no overscrolling, just looks weird
 
         layout = (LinearLayout) findViewById(R.id.llayout);
+        center = (TextView) findViewById(R.id.center_of_screen);
 
         // set up list items with their launch intents
         listItems.add(new ListItem("phone", "com.android.dialer", "com.android.dialer.DialtactsActivity"));
@@ -89,6 +93,12 @@ public class HomeActivity extends Activity {
         loadPrefs();
 
         logWrapper("Found " + listItems.size() + " home screen items");
+
+        for (int p=0; p<4; p++) {
+            TextView pad = (TextView) View.inflate(this, R.layout.list_item, null);
+            pad.setBackground(null);
+            layout.addView(pad);
+        }
 
         // iterate over ArrayList, item is final so it can be accessed in click listener inner class
         for (final ListItem item : listItems) {
@@ -130,35 +140,44 @@ public class HomeActivity extends Activity {
                 @Override
                 public void onClick(View v) {
 
-                    animateTouch(v);
-                    int id = v.getId();
-                    logWrapper("ID clicked: " + id);
-                    final Intent i = item.getLaunchIntent();
-                    logWrapper("Recieved launch intent for " + itemName);
-                    try {
-                        if (!itemName.equals("applications")) {
-                            i.setAction(Intent.ACTION_MAIN);
-                            i.addCategory(Intent.CATEGORY_LAUNCHER);
-                            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-                        } else {
-                             // do not run the app drawer in the main thread, I think :)
-                            new Thread(new Runnable() {
-                                public void run() {
-                                    startActivity(i);
-                                }
-                            });
-                        }
+                    if (homeView.isVewHighlighted((TextView) v)) {
+                        Log.i("HIGHLIGHT", ((TextView) v).getText().toString() + " is centered!");
 
-                        startActivity(i);
-                    } catch (Exception e) {
-                        // tell the user what happened
-                        showToast(e.getMessage());
+                        animateTouch(v);
+                        int id = v.getId();
+                        logWrapper("ID clicked: " + id);
+                        final Intent i = item.getLaunchIntent();
+                        logWrapper("Recieved launch intent for " + itemName);
+                        try {
+                            if (!itemName.equals("applications")) {
+                                i.setAction(Intent.ACTION_MAIN);
+                                i.addCategory(Intent.CATEGORY_LAUNCHER);
+                                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+                            } else {
+                                 // do not run the app drawer in the main thread, I think :)
+                                new Thread(new Runnable() {
+                                    public void run() {
+                                        startActivity(i);
+                                    }
+                                });
+                            }
+
+                            startActivity(i);
+                        } catch (Exception e) {
+                            // tell the user what happened
+                            showToast(e.getMessage());
+                        }
                     }
                 }
             };
 
             tv.setOnClickListener(clickListener);
             layout.addView(tv);
+        }
+        for (int p=0; p<4; p++) {
+            TextView pad = (TextView) View.inflate(this, R.layout.list_item, null);
+            pad.setBackground(null);
+            layout.addView(pad);
         }
     }
 

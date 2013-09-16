@@ -23,9 +23,9 @@
     android:layout_height="match_parent"
     android:id="@+id/rLayout">
 
-    <ScrollView
+    <com.raidzero.androidium.HomeView
         android:scrollbars="none"
-        android:id="@+id/scrollview"
+        android:id="@+id/home_view"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" >
 
@@ -36,6 +36,13 @@
             android:orientation="vertical" >
         </LinearLayout>
 
-    </ScrollView>
+    </com.raidzero.androidium.HomeView>
 
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/center_of_screen"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:textSize="80dp"/>
 </RelativeLayout>
