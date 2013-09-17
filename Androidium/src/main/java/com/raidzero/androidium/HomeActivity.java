@@ -35,10 +35,10 @@ import java.util.ArrayList;
 
 public class HomeActivity extends Activity {
 
+    static final String tag = "androidium";
+
     private boolean missedNumbers_enabled;
     private static final Boolean debug = false;
-
-    static final String tag = "androidium";
 
     private static final int pkg_request_code = 1;
     private static final int act_request_code = 2;
@@ -46,7 +46,6 @@ public class HomeActivity extends Activity {
     int missedCalls, unreadSMS;
 
     final ArrayList<ListItem> listItems = new ArrayList<ListItem>();
-    final ArrayList<String> itemsDisplayed = new ArrayList<String>();
 
     private LinearLayout layout;
     private HomeView homeView;
@@ -54,6 +53,7 @@ public class HomeActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        logWrapper("onCreate...");
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.home_scroll);
@@ -66,28 +66,26 @@ public class HomeActivity extends Activity {
         center = (TextView) findViewById(R.id.center_of_screen);
 
         // set up list items with their launch intents
-        listItems.add(new ListItem("phone", "com.android.dialer", "com.android.dialer.DialtactsActivity"));
-        listItems.add(new ListItem("people", "com.android.contacts", "com.android.contacts.activities.PeopleActivity"));
-        listItems.add(new ListItem("messages", "com.android.mms", "com.android.mms.ui.ConversationList"));
-        listItems.add(new ListItem("e-mail", "com.google.android.gm", "com.google.android.gm.GmailActivity"));
-        listItems.add(new ListItem("weather", "com.levelup.beautifulwidgets", "com.levelup.beautifulwidgets.full.activities.ForecastActivityFull"));
-        listItems.add(new ListItem("applications", "com.raidzero.androidium", "com.raidzero.androidium.AppDrawer"));
-        listItems.add(new ListItem("calculator", "com.android.calculator2", "com.android.calculator2.Calculator"));
-        listItems.add(new ListItem("camera", "com.android.gallery3d", "com.android.camera.CameraActivity"));
-        listItems.add(new ListItem("pictures", "com.android.gallery3d", "com.android.gallery3d.app.Gallery"));
-        listItems.add(new ListItem("music", "github.daneren2005.dsub", "github.daneren2005.dsub.activity.MainActivity"));
-        listItems.add(new ListItem("finances", "com.chase.sig.android", "com.chase.sig.android.activity.HomeActivity"));
-        listItems.add(new ListItem("internet", "com.android.browser", "com.android.browser.BrowserActivity"));
-        listItems.add(new ListItem("calendar", "com.android.calendar", "com.android.calendar.AllInOneActivity"));
-        listItems.add(new ListItem("play", "com.android.vending", "com.google.android.finsky.activities.MainActivity"));
+        listItems.add(new ListItem("phone", "com.android.dialer", "com.android.dialer.DialtactsActivity", getResources().getDrawable(R.drawable.phone)));
+        listItems.add(new ListItem("people", "com.android.contacts", "com.android.contacts.activities.PeopleActivity", getResources().getDrawable(R.drawable.people)));
+        listItems.add(new ListItem("messages", "com.android.mms", "com.android.mms.ui.ConversationList", getResources().getDrawable(R.drawable.messages)));
+        listItems.add(new ListItem("e-mail", "com.google.android.gm", "com.google.android.gm.GmailActivity", getResources().getDrawable(R.drawable.email)));
+        listItems.add(new ListItem("weather", "com.levelup.beautifulwidgets", "com.levelup.beautifulwidgets.full.activities.ForecastActivityFull", getResources().getDrawable(R.drawable.weather)));
+        listItems.add(new ListItem("applications", "com.raidzero.androidium", "com.raidzero.androidium.AppDrawer", getResources().getDrawable(R.drawable.applications)));
+        listItems.add(new ListItem("calculator", "com.android.calculator2", "com.android.calculator2.Calculator", getResources().getDrawable(R.drawable.calculator)));
+        listItems.add(new ListItem("camera", "com.android.gallery3d", "com.android.camera.CameraActivity", getResources().getDrawable(R.drawable.camera)));
+        listItems.add(new ListItem("pictures", "com.android.gallery3d", "com.android.gallery3d.app.Gallery", getResources().getDrawable(R.drawable.pictures)));
+        listItems.add(new ListItem("music", "github.daneren2005.dsub", "github.daneren2005.dsub.activity.MainActivity", getResources().getDrawable(R.drawable.music)));
+        listItems.add(new ListItem("finances", "com.chase.sig.android", "com.chase.sig.android.activity.HomeActivity", getResources().getDrawable(R.drawable.finances)));
+        listItems.add(new ListItem("internet", "com.android.browser", "com.android.browser.BrowserActivity", getResources().getDrawable(R.drawable.internet)));
+        listItems.add(new ListItem("calendar", "com.android.calendar", "com.android.calendar.AllInOneActivity", getResources().getDrawable(R.drawable.calendar)));
+        listItems.add(new ListItem("play", "com.android.vending", "com.google.android.finsky.activities.MainActivity", getResources().getDrawable(R.drawable.play)));
 
         updateView();
     }
 
     private void updateView() {
         logWrapper("updateView() called.");
-
-        int i = 0; // this will be how we ID the list items
 
         updatedMissedItems();
         loadPrefs();
@@ -97,6 +95,7 @@ public class HomeActivity extends Activity {
         for (int p=0; p<4; p++) {
             TextView pad = (TextView) View.inflate(this, R.layout.list_item, null);
             pad.setBackground(null);
+            pad.setTextSize(42);
             layout.addView(pad);
         }
 
@@ -108,44 +107,26 @@ public class HomeActivity extends Activity {
             logWrapper("Working on item " + itemName);
             logWrapper("item " + itemName + " visible: " + itemVisible);
 
-            // skip invisible or already shown things
-            if (!itemVisible || itemsDisplayed.contains(itemName)) {
+            // skip invisible items
+            if (!itemVisible) {
                 continue;
             }
 
-            // make a new textview from our list_item template
-            TextView tv = (TextView) View.inflate(this, R.layout.list_item, null);
+            // get a TextView from the item
+            //TextView tv = item.getTextView(this, missedNumbers_enabled);
 
-            // set the ID to what we put in the ListItem
-            tv.setId(i);
+            RelativeLayout cv = item.getComplexView(this, missedNumbers_enabled);
+            layout.addView(cv);
 
-            if (itemName.equals("phone") && missedCalls > 0 && missedNumbers_enabled) {
-                // add missed calls in superscript
-                tv.setText(Html.fromHtml("phone <sup><small>" + missedCalls + "</small></sup>"));
-            }
-            else if (itemName.equals("messages") && unreadSMS > 0 && missedNumbers_enabled) {
-                // add unread SMS in superscript
-                tv.setText(Html.fromHtml("messages <sup><small>" + unreadSMS + "</small></sup>"));
-            }
-            else {
-                logWrapper("Displaying item " + item.getItemName());
-                tv.setText(itemName);
-            }
-
-            itemsDisplayed.add(itemName);
-            i++; // increment good old iterator
 
             // add touch listener
             View.OnClickListener clickListener = new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    if (homeView.isVewHighlighted((TextView) v)) {
-                        Log.i("HIGHLIGHT", ((TextView) v).getText().toString() + " is centered!");
+                    if (homeView.isViewHighlighted(v)) {
 
                         animateTouch(v);
-                        int id = v.getId();
-                        logWrapper("ID clicked: " + id);
                         final Intent i = item.getLaunchIntent();
                         logWrapper("Recieved launch intent for " + itemName);
                         try {
@@ -171,12 +152,14 @@ public class HomeActivity extends Activity {
                 }
             };
 
-            tv.setOnClickListener(clickListener);
-            layout.addView(tv);
+            cv.setOnClickListener(clickListener);
+
+
         }
         for (int p=0; p<4; p++) {
             TextView pad = (TextView) View.inflate(this, R.layout.list_item, null);
             pad.setBackground(null);
+            pad.setTextSize(42);
             layout.addView(pad);
         }
     }

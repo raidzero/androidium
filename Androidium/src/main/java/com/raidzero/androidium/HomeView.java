@@ -21,12 +21,11 @@ package com.raidzero.androidium;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Typeface;
+import android.provider.ContactsContract;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.*;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
+import android.widget.*;
 
 public class HomeView extends ScrollView {
 
@@ -77,39 +76,70 @@ public class HomeView extends ScrollView {
         centerCenter = (centerSize/2) + centerTop;
     }
 
+
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         //Log.i("Scrolling", "Y from [" + oldt + "] to [" + t + "]");
 
         ScrollView sv = this;
 
-        LinearLayout svChild_layout = (LinearLayout) sv.getChildAt(0);
+        // how many children do we have?
+        int childCount = sv.getChildCount();
+        //Log.i("SCROLLING", childCount + " children found");
 
-        int llChild_count = svChild_layout.getChildCount();
+        LinearLayout linear_layout = (LinearLayout) sv.getChildAt(0);
+        if (linear_layout instanceof LinearLayout) {
+            //Log.i("SCROLLING", "Linear layout");
 
-        // loop through children
-        for (int i =0; i< llChild_count; i++) {
-            TextView child = (TextView) svChild_layout.getChildAt(i);
-            String childName = child.getText().toString();
-            if (childName.isEmpty()) {
-                continue;
-            }
+            int llayoutChildren = linear_layout.getChildCount();
+            //Log.i("SCROLLING", "llayoutChildren: " + llayoutChildren);
+            // in here we have some relative and text views. ignore text views
+            for (int i=0; i<llayoutChildren; i++) {
+                View child = linear_layout.getChildAt(i);
+                if (child instanceof TextView) {
+                    //Log.i("SCROLLING", "Skipping crap view");
+                    continue;
+                }
+                if (child instanceof RelativeLayout) {
+                    // is it in center of screen?
+                    int childSize = child.getBottom() - child.getTop();
+                    int[] vCoords = new int[2];
+                    child.getLocationOnScreen(vCoords);
 
-            viewSize = child.getBottom() - child.getTop();
+                    // determine the bottom of the view
+                    int childViewTop = vCoords[1];
+                    int childViewBottom = childViewTop + childSize;
 
-            int[] vCoords = new int[2];
-            child.getLocationOnScreen(vCoords);
+                    if (childViewTop >= centerTop && childViewBottom <= centerBottom) {
+                        viewCentered = true;
+                    } else {
+                        viewCentered = false;
+                    }
 
-            // determine the bottom of the view
-            viewTop = vCoords[1];
-            viewBottom = viewTop + viewSize;
+                    // should have 2 children in here. textview and imageview
+                    int innerCount = ((RelativeLayout) child).getChildCount();
+                    for (int j=0; j<innerCount; j++) {
+                        View innerChild = ((RelativeLayout) child).getChildAt(j);
 
-            if (viewTop >= centerTop && viewBottom <= centerBottom) {
-                viewCentered = true;
-                child.setTypeface(null, Typeface.BOLD);
-            } else {
-                viewCentered = false;
-                child.setTypeface(null, Typeface.NORMAL);
+                        if (viewCentered) {
+                            if (innerChild instanceof TextView) {
+                                ((TextView) innerChild).setTypeface(null, Typeface.BOLD);
+                                ((TextView) innerChild).setShadowLayer(20, 0, 0, getResources().getColor(R.color.list_item_shadow));
+                            }
+                            if (innerChild instanceof ImageView) {
+                                innerChild.setVisibility(View.VISIBLE);
+                            }
+                        } else { // not centered
+                            if (innerChild instanceof TextView) {
+                                ((TextView) innerChild).setTypeface(null, Typeface.NORMAL);
+                                ((TextView) innerChild).setShadowLayer(50, 0, 0, getResources().getColor(R.color.list_item_shadow));
+                            }
+                            if (innerChild instanceof ImageView) {
+                                innerChild.setVisibility(View.GONE);
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -117,10 +147,12 @@ public class HomeView extends ScrollView {
     }
 
 
+
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         this.touchX = (int) ev.getX();
         this.touchY = (int) ev.getY();
+
 
         /*
         if (touchY >= centerTop && touchY <= centerBottom) {
@@ -128,12 +160,14 @@ public class HomeView extends ScrollView {
         }
         */
 
+
         //Log.i("HOMEVIEW", "Screen touched at [" + touchX + ", " + touchY + "]");
         return super.onInterceptTouchEvent(ev);
     }
 
 
-    public Boolean isVewHighlighted(TextView v) {
+
+    public Boolean isViewHighlighted(View v) {
         if (v == null) {
             return false;
         }
@@ -147,8 +181,7 @@ public class HomeView extends ScrollView {
 
         /*
         Log.i("RELATIVEVIEW CENTER", "Top: " + relativeViewTop +
-              " Bottom: " + relativeViewBottom +
-              " Center: " + relativeViewCenter);
+              " Bottom: " + relativeViewBottom);
         */
 
         int[] vCoords = new int[2];
@@ -158,9 +191,11 @@ public class HomeView extends ScrollView {
         viewTop = vCoords[1];
         viewBottom = viewTop + viewSize;
 
+        /*
         Log.i("CENTER", "Top: " + centerTop +
                 " Bottom: " + centerBottom +
                 " Center: " + centerCenter);
+        */
 
         if (viewTop >= centerTop && viewBottom <= centerBottom) {
             //Log.i("Scrolling", v.getText().toString() + " has entered the center!");
@@ -174,4 +209,6 @@ public class HomeView extends ScrollView {
 
         return false;
     }
+
+
 }

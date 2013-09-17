@@ -42,7 +42,6 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/center_of_screen"
-        android:background="#40ffffff"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
         android:textSize="90dp"/>
