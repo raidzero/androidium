@@ -49,7 +49,7 @@ public class HomeActivity extends Activity {
 
     private LinearLayout layout;
     private HomeView homeView;
-    public static TextView center;
+    public static RelativeLayout center;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +63,8 @@ public class HomeActivity extends Activity {
         homeView.setOverScrollMode(View.OVER_SCROLL_NEVER); // no overscrolling, just looks weird
 
         layout = (LinearLayout) findViewById(R.id.llayout);
-        center = (TextView) findViewById(R.id.center_of_screen);
+        center = (RelativeLayout) findViewById(R.id.center_of_screen);
+
 
         // set up list items with their launch intents
         listItems.add(new ListItem("phone", "com.android.dialer", "com.android.dialer.DialtactsActivity", getResources().getDrawable(R.drawable.phone)));

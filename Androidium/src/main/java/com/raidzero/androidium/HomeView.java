@@ -19,8 +19,11 @@
 package com.raidzero.androidium;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.provider.ContactsContract;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -29,7 +32,7 @@ import android.widget.*;
 
 public class HomeView extends ScrollView {
 
-    TextView center; // this is the center highlight
+    RelativeLayout center; // this is the center highlight
 
     // these are where the highlight section is
     private int centerTop;
@@ -74,6 +77,8 @@ public class HomeView extends ScrollView {
         centerTop = coords[1];
         centerBottom = centerTop + centerSize;
         centerCenter = (centerSize/2) + centerTop;
+
+        //Log.i("CENTER", "centerTop: " + centerTop + " centerBottom: " + centerBottom);
     }
 
 
@@ -82,6 +87,8 @@ public class HomeView extends ScrollView {
         //Log.i("Scrolling", "Y from [" + oldt + "] to [" + t + "]");
 
         ScrollView sv = this;
+
+
 
         // how many children do we have?
         int childCount = sv.getChildCount();
@@ -127,7 +134,12 @@ public class HomeView extends ScrollView {
                                 ((TextView) innerChild).setShadowLayer(20, 0, 0, getResources().getColor(R.color.list_item_shadow));
                             }
                             if (innerChild instanceof ImageView) {
-                                innerChild.setVisibility(View.VISIBLE);
+                                // get a handle on the center's imageview
+                                ImageView centerIcon = (ImageView) center.getChildAt(0);
+                                if (centerIcon instanceof ImageView) {
+                                    centerIcon.setImageDrawable(((ImageView) innerChild).getDrawable());
+                                    centerIcon.setVisibility(View.VISIBLE);
+                                }
                             }
                         } else { // not centered
                             if (innerChild instanceof TextView) {
@@ -209,6 +221,4 @@ public class HomeView extends ScrollView {
 
         return false;
     }
-
-
 }
