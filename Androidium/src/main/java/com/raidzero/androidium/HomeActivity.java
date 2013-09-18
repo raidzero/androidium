@@ -24,7 +24,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
-import android.text.Html;
 import android.util.Log;
 import android.view.*;
 import android.view.animation.Animation;
@@ -67,6 +66,7 @@ public class HomeActivity extends Activity {
 
 
         // set up list items with their launch intents
+        listItems.add(new ListItem("google", "com.google.android.googlequicksearchbox", "com.google.android.googlequicksearchbox.SearchActivity", getResources().getDrawable(R.drawable.google)));
         listItems.add(new ListItem("phone", "com.android.dialer", "com.android.dialer.DialtactsActivity", getResources().getDrawable(R.drawable.phone)));
         listItems.add(new ListItem("people", "com.android.contacts", "com.android.contacts.activities.PeopleActivity", getResources().getDrawable(R.drawable.people)));
         listItems.add(new ListItem("messages", "com.android.mms", "com.android.mms.ui.ConversationList", getResources().getDrawable(R.drawable.messages)));
