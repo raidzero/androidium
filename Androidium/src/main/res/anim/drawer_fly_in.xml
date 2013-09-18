@@ -2,7 +2,7 @@
 
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ~ /*
-  ~ ** Copyright 9/14/2013, raidzero
+  ~ ** Copyright 9/17/2013, raidzero
   ~ **
   ~ ** Licensed under the Apache License, Version 2.0 (the "License");
   ~ ** you may not use this file except in compliance with the License.
@@ -18,16 +18,15 @@
   ~ *
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 
-<GridView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/app_grid_view"
-            android:scrollbars="none"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:numColumns="4"
-            android:columnWidth="90dp"
-            android:verticalSpacing="10dp"
-            android:horizontalSpacing="10dp"
-            android:stretchMode="columnWidth"
-            android:gravity="center"
-            android:drawSelectorOnTop="false">
-</GridView>
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <scale
+        android:interpolator="@android:anim/accelerate_decelerate_interpolator"
+        android:fromXScale="0.0"
+        android:toXScale="1.0"
+        android:fromYScale="0.0"
+        android:toYScale="1.0"
+        android:fillAfter="false"
+        android:pivotX="50%"
+        android:pivotY="50%"
+        android:duration="50" />
+</set>

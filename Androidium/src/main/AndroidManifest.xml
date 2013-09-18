@@ -59,16 +59,16 @@
         <activity
             android:theme="@android:style/Theme.Holo"
             android:name=".PackageBrowser"
-            android:label="Please select a package" >
+            android:label="@string/select_package" >
         </activity>
         <activity
             android:theme="@android:style/Theme.Holo"
             android:name=".ActivityBrowser"
-            android:label="Please select an activity" >
+            android:label="@string/select_activity" >
         </activity>
         <activity
             android:process="com.raidzero.androidium.drawerthread"
-            android:theme="@android:style/Theme.Holo.Wallpaper.NoTitleBar"
+            android:theme="@style/AppDrawerAnimation"
             android:name=".AppDrawer">
         </activity>
     </application>

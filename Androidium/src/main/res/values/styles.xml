@@ -41,4 +41,14 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
+    <style name="AppDrawerAnimation" parent="android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/drawer_fly_in</item>
+        <item name="android:activityCloseExitAnimation">@anim/drawer_fly_out</item>
+    </style>
+
+    <style name="Theme.AppDrawerTheme" parent="@style/Theme.D1NoTitleDim">
+        <item name="android:windowAnimationStyle">@style/AppDrawerAnimation</item>
+        <item name="android:background">@color/app_drawer_background</item>
+    </style>
+
 </resources>
