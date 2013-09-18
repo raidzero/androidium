@@ -24,10 +24,9 @@
           android:padding="10dp"
           android:textStyle="normal"
           android:textColor="#ffffff"
-
           android:shadowColor="@color/list_item_shadow"
           android:shadowDx="0"
           android:shadowDy="0"
-          android:shadowRadius="50"
+          android:shadowRadius="60"
           android:textSize="40dp">
 </TextView>

@@ -20,6 +20,8 @@ package com.raidzero.androidium;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.text.Html;
 import android.view.View;
@@ -32,13 +34,11 @@ public class ListItem extends HomeActivity {
     private String pkgName;
     private String activityName;
     private Boolean visible = true;
-    private Drawable mainIcon;
 
-    public ListItem(String name, String pkg, String activity, Drawable icon) {
+    public ListItem(String name, String pkg, String activity) {
         this.item_name = name;
         this.pkgName = pkg;
         this.activityName = activity;
-        this.mainIcon = icon;
     }
 
     public void setVisible(Boolean b)
@@ -55,11 +55,6 @@ public class ListItem extends HomeActivity {
     public String getItemName() {
         return item_name;
     }
-
-    public Drawable getMainIcon() {
-        return mainIcon;
-    }
-
 
     public TextView getTextView(Context context, boolean missedNumbersAvailable) {
         TextView retView = (TextView) View.inflate(context, R.layout.list_item, null);
@@ -99,7 +94,17 @@ public class ListItem extends HomeActivity {
 
             // imageview?
             if (childView instanceof ImageView) {
-                ((ImageView) childView).setImageDrawable(mainIcon);
+
+                // get icon that matches package name
+                try {
+                    PackageManager pm = context.getPackageManager();
+                    ApplicationInfo appInfo = pm.getApplicationInfo(pkgName, 0);
+                    Drawable appIcon = pm.getApplicationIcon(appInfo);
+                    ((ImageView) childView).setImageDrawable(appIcon);
+                } catch (Exception e) {
+                    // dont do anything, leave it blank
+                }
+
                 childView.setVisibility(View.GONE);
             }
         }

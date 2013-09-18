@@ -64,23 +64,22 @@ public class HomeActivity extends Activity {
         layout = (LinearLayout) findViewById(R.id.llayout);
         center = (RelativeLayout) findViewById(R.id.center_of_screen);
 
-
         // set up list items with their launch intents
-        listItems.add(new ListItem("google", "com.google.android.googlequicksearchbox", "com.google.android.googlequicksearchbox.SearchActivity", getResources().getDrawable(R.drawable.google)));
-        listItems.add(new ListItem("phone", "com.android.dialer", "com.android.dialer.DialtactsActivity", getResources().getDrawable(R.drawable.phone)));
-        listItems.add(new ListItem("people", "com.android.contacts", "com.android.contacts.activities.PeopleActivity", getResources().getDrawable(R.drawable.people)));
-        listItems.add(new ListItem("messages", "com.android.mms", "com.android.mms.ui.ConversationList", getResources().getDrawable(R.drawable.messages)));
-        listItems.add(new ListItem("e-mail", "com.google.android.gm", "com.google.android.gm.GmailActivity", getResources().getDrawable(R.drawable.email)));
-        listItems.add(new ListItem("weather", "com.levelup.beautifulwidgets", "com.levelup.beautifulwidgets.full.activities.ForecastActivityFull", getResources().getDrawable(R.drawable.weather)));
-        listItems.add(new ListItem("applications", "com.raidzero.androidium", "com.raidzero.androidium.AppDrawer", getResources().getDrawable(R.drawable.applications)));
-        listItems.add(new ListItem("calculator", "com.android.calculator2", "com.android.calculator2.Calculator", getResources().getDrawable(R.drawable.calculator)));
-        listItems.add(new ListItem("camera", "com.android.gallery3d", "com.android.camera.CameraActivity", getResources().getDrawable(R.drawable.camera)));
-        listItems.add(new ListItem("pictures", "com.android.gallery3d", "com.android.gallery3d.app.Gallery", getResources().getDrawable(R.drawable.pictures)));
-        listItems.add(new ListItem("music", "github.daneren2005.dsub", "github.daneren2005.dsub.activity.MainActivity", getResources().getDrawable(R.drawable.music)));
-        listItems.add(new ListItem("finances", "com.chase.sig.android", "com.chase.sig.android.activity.HomeActivity", getResources().getDrawable(R.drawable.finances)));
-        listItems.add(new ListItem("internet", "com.android.browser", "com.android.browser.BrowserActivity", getResources().getDrawable(R.drawable.internet)));
-        listItems.add(new ListItem("calendar", "com.android.calendar", "com.android.calendar.AllInOneActivity", getResources().getDrawable(R.drawable.calendar)));
-        listItems.add(new ListItem("play", "com.android.vending", "com.google.android.finsky.activities.MainActivity", getResources().getDrawable(R.drawable.play)));
+        listItems.add(new ListItem("google", "com.google.android.googlequicksearchbox", "com.google.android.googlequicksearchbox.SearchActivity"));
+        listItems.add(new ListItem("phone", "com.android.dialer", "com.android.dialer.DialtactsActivity"));
+        listItems.add(new ListItem("people", "com.android.contacts", "com.android.contacts.activities.PeopleActivity"));
+        listItems.add(new ListItem("messages", "com.android.mms", "com.android.mms.ui.ConversationList"));
+        listItems.add(new ListItem("e-mail", "com.google.android.gm", "com.google.android.gm.GmailActivity"));
+        listItems.add(new ListItem("weather", "com.levelup.beautifulwidgets", "com.levelup.beautifulwidgets.full.activities.ForecastActivityFull"));
+        listItems.add(new ListItem("applications", "com.raidzero.androidium", "com.raidzero.androidium.AppDrawer"));
+        listItems.add(new ListItem("calculator", "com.android.calculator2", "com.android.calculator2.Calculator"));
+        listItems.add(new ListItem("camera", "com.android.gallery3d", "com.android.camera.CameraActivity"));
+        listItems.add(new ListItem("pictures", "com.android.gallery3d", "com.android.gallery3d.app.Gallery"));
+        listItems.add(new ListItem("music", "github.daneren2005.dsub", "github.daneren2005.dsub.activity.MainActivity"));
+        listItems.add(new ListItem("finances", "com.chase.sig.android", "com.chase.sig.android.activity.HomeActivity"));
+        listItems.add(new ListItem("internet", "com.android.browser", "com.android.browser.BrowserActivity"));
+        listItems.add(new ListItem("calendar", "com.android.calendar", "com.android.calendar.AllInOneActivity"));
+        listItems.add(new ListItem("play", "com.android.vending", "com.google.android.finsky.activities.MainActivity"));
 
         updateView();
     }
