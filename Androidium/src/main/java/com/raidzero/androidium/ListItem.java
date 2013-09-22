@@ -70,6 +70,10 @@ public class ListItem extends HomeActivity {
         return retView;
     }
 
+    public String toString() {
+        return item_name + " " + pkgName + " " + activityName;
+    }
+
     public RelativeLayout getComplexView(Context context, boolean missedNumbersAvailable) {
         RelativeLayout complexView = (RelativeLayout) View.inflate(context, R.layout.complex_list_item, null);
 

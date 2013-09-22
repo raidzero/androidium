@@ -30,11 +30,16 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.*;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.util.ArrayList;
 
 public class HomeActivity extends Activity {
 
     static final String tag = "androidium";
+    static final String CONFIG_FILE = "items";
 
     private boolean missedNumbers_enabled;
     private static final Boolean debug = false;
@@ -55,6 +60,8 @@ public class HomeActivity extends Activity {
         logWrapper("onCreate...");
         super.onCreate(savedInstanceState);
 
+        loadItems();
+
         setContentView(R.layout.home_scroll);
 
         homeView = (HomeView) findViewById(R.id.home_view);
@@ -63,23 +70,6 @@ public class HomeActivity extends Activity {
 
         layout = (LinearLayout) findViewById(R.id.llayout);
         center = (RelativeLayout) findViewById(R.id.center_of_screen);
-
-        // set up list items with their launch intents
-        listItems.add(new ListItem("google", "com.google.android.googlequicksearchbox", "com.google.android.googlequicksearchbox.SearchActivity"));
-        listItems.add(new ListItem("phone", "com.android.dialer", "com.android.dialer.DialtactsActivity"));
-        listItems.add(new ListItem("people", "com.android.contacts", "com.android.contacts.activities.PeopleActivity"));
-        listItems.add(new ListItem("messages", "com.android.mms", "com.android.mms.ui.ConversationList"));
-        listItems.add(new ListItem("e-mail", "com.google.android.gm", "com.google.android.gm.GmailActivity"));
-        listItems.add(new ListItem("weather", "com.levelup.beautifulwidgets", "com.levelup.beautifulwidgets.full.activities.ForecastActivityFull"));
-        listItems.add(new ListItem("applications", "com.raidzero.androidium", "com.raidzero.androidium.AppDrawer"));
-        listItems.add(new ListItem("calculator", "com.android.calculator2", "com.android.calculator2.Calculator"));
-        listItems.add(new ListItem("camera", "com.android.gallery3d", "com.android.camera.CameraActivity"));
-        listItems.add(new ListItem("pictures", "com.android.gallery3d", "com.android.gallery3d.app.Gallery"));
-        listItems.add(new ListItem("music", "github.daneren2005.dsub", "github.daneren2005.dsub.activity.MainActivity"));
-        listItems.add(new ListItem("finances", "com.chase.sig.android", "com.chase.sig.android.activity.HomeActivity"));
-        listItems.add(new ListItem("internet", "com.android.browser", "com.android.browser.BrowserActivity"));
-        listItems.add(new ListItem("calendar", "com.android.calendar", "com.android.calendar.AllInOneActivity"));
-        listItems.add(new ListItem("play", "com.android.vending", "com.google.android.finsky.activities.MainActivity"));
 
         updateView();
     }
@@ -172,6 +162,81 @@ public class HomeActivity extends Activity {
         }
     }
 
+    public void removeListItem(String name) {
+        int i = 0;
+        for (ListItem item : listItems) {
+            if (item.getItemName().equals(name)) {
+                listItems.remove(i);
+            }
+            i++;
+        }
+    }
+
+    public File getItemsFile() {
+        String CONFIG_FILEPATH = getFilesDir() + "/" + CONFIG_FILE;
+        Log.d(tag, "CONFIG_FILEPATH: " + CONFIG_FILEPATH);
+        File CONFIG_FP = new File(CONFIG_FILEPATH);
+        return CONFIG_FP;
+    }
+
+    protected void writeItems() {
+        // open file
+        try {
+            File CONFIG_FP = getItemsFile();
+            FileOutputStream fp = new FileOutputStream(CONFIG_FP, false); // false means overwrite file
+            for (ListItem item : listItems) {
+                fp.write((item.toString() + "\n").getBytes());
+            }
+            fp.close();
+        } catch (Exception e) {
+            Log.d("save", "file open failure");
+            return; // just give up
+        }
+
+    }
+
+    public void loadItems() {
+        File CONFIG_FP = getItemsFile();
+        if (!CONFIG_FP.exists()) {
+            // then build up default shortcuts
+            Log.d(tag, "saved shortcut file does not exist");
+            listItems.add(new ListItem("google", "com.google.android.googlequicksearchbox", "com.google.android.googlequicksearchbox.SearchActivity"));
+            listItems.add(new ListItem("phone", "com.android.dialer", "com.android.dialer.DialtactsActivity"));
+            listItems.add(new ListItem("people", "com.android.contacts", "com.android.contacts.activities.PeopleActivity"));
+            listItems.add(new ListItem("messages", "com.android.mms", "com.android.mms.ui.ConversationList"));
+            listItems.add(new ListItem("e-mail", "com.google.android.gm", "com.google.android.gm.GmailActivity"));
+            listItems.add(new ListItem("weather", "com.levelup.beautifulwidgets", "com.levelup.beautifulwidgets.full.activities.ForecastActivityFull"));
+            listItems.add(new ListItem("applications", "com.raidzero.androidium", "com.raidzero.androidium.AppDrawer"));
+            listItems.add(new ListItem("calculator", "com.android.calculator2", "com.android.calculator2.Calculator"));
+            listItems.add(new ListItem("camera", "com.android.gallery3d", "com.android.camera.CameraActivity"));
+            listItems.add(new ListItem("pictures", "com.android.gallery3d", "com.android.gallery3d.app.Gallery"));
+            listItems.add(new ListItem("music", "github.daneren2005.dsub", "github.daneren2005.dsub.activity.MainActivity"));
+            listItems.add(new ListItem("finances", "com.chase.sig.android", "com.chase.sig.android.activity.HomeActivity"));
+            listItems.add(new ListItem("internet", "com.android.browser", "com.android.browser.BrowserActivity"));
+            listItems.add(new ListItem("calendar", "com.android.calendar", "com.android.calendar.AllInOneActivity"));
+            listItems.add(new ListItem("play", "com.android.vending", "com.google.android.finsky.activities.MainActivity"));
+        } else { // file does exist, so let's try reading from it
+            try {
+                Log.d(tag, "saved shortcut file found. loading items from it...");
+
+                FileReader reader = new FileReader(CONFIG_FP);
+                BufferedReader bufferedReader = new BufferedReader(reader);
+                String line;
+
+                // loop over file's lines
+                while ((line = bufferedReader.readLine()) != null) {
+                    Log.i(tag, "Loading shortcut: " + line);
+                    String[] components = line.split(" ");
+                    listItems.add(new ListItem(components[0], components[1], components[2]));
+                }
+                // close reader
+                reader.close();
+            } catch (Exception e) {
+                Log.d(tag, "FileReader exception: " + e.getMessage());
+            }
+        }
+    }
+
     public void loadPrefs() {
         logWrapper("loadPrefs() started.");
 
@@ -179,17 +244,6 @@ public class HomeActivity extends Activity {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         missedNumbers_enabled = prefs.getBoolean("enable_missed_numbers", true);
-        setItemVisible("phone", prefs.getBoolean("enable_phone", true));
-        setItemVisible("people", prefs.getBoolean("enable_people", true));
-        setItemVisible("messages", prefs.getBoolean("enable_messages", true));
-        setItemVisible("e-mail", prefs.getBoolean("enable_email", true));
-        setItemVisible("applications", prefs.getBoolean("enable_applications", true));
-        setItemVisible("calculator", prefs.getBoolean("enable_calculator", true));
-        setItemVisible("camera", prefs.getBoolean("enable_camera", true));
-        setItemVisible("pictures", prefs.getBoolean("enable_pictures", true));
-        setItemVisible("internet", prefs.getBoolean("enable_internet", true));
-        setItemVisible("calendar", prefs.getBoolean("enable_calendar", true));
-        setItemVisible("play", prefs.getBoolean("enable_play", true));
 
         logWrapper("loadPrefs() finished.");
     }
@@ -293,7 +347,13 @@ public class HomeActivity extends Activity {
 
     @Override public void onPause() {
         super.onResume();
+        writeItems();
         loadPrefs();
+    }
+
+    @Override public void onStop() {
+        super.onStop();
+        writeItems();
     }
 
     @Override public void onResume() {
