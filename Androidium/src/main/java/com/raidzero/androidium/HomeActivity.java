@@ -19,6 +19,7 @@
 package com.raidzero.androidium;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -46,6 +47,8 @@ public class HomeActivity extends Activity {
 
     private static final int pkg_request_code = 1;
     private static final int act_request_code = 2;
+    private static final int name_request_code = 3;
+
 
     int missedCalls, unreadSMS;
 
@@ -195,6 +198,17 @@ public class HomeActivity extends Activity {
 
     }
 
+    public void addItemToFile(String line) {
+        try {
+            FileOutputStream fp = openFileOutput("items", Context.MODE_PRIVATE);
+            fp.write(line.getBytes());
+            fp.close();
+        } catch (Exception e) {
+            Log.d("write", "file open failure");
+            return; // just give up
+        }
+    }
+
     public void loadItems() {
         File CONFIG_FP = getItemsFile();
         if (!CONFIG_FP.exists()) {
@@ -325,10 +339,22 @@ public class HomeActivity extends Activity {
             case act_request_code: // handle an activity name sent back
                 if (resultCode == RESULT_OK) {
                     String actName = data.getData().toString();
-                    Toast.makeText(this, actName,
-                            Toast.LENGTH_SHORT).show();
+                    Intent i = new Intent(this, NameShortcut.class);
+                    i.putExtra("shortcut", actName);
+                    startActivityForResult(i, name_request_code);
                 }
+                break;
+            case name_request_code:
                 // TODO: actually add this to the list of stuff
+                if (resultCode == RESULT_OK) {
+                    String shortcutName = data.getData().toString();
+                    Toast.makeText(this, shortcutName,
+                            Toast.LENGTH_SHORT).show();
+                    addItemToFile(shortcutName);
+                    // then add to listItems itself
+                    String shortcut[] = shortcutName.split(" ");
+                    listItems.add(new ListItem(shortcut[0], shortcut[1], shortcut[2]));
+                }
                 break;
         }
     }

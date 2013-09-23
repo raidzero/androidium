@@ -27,5 +27,6 @@
     <string name="action_add">Add</string>
     <string name="select_package">Please select a package</string>
     <string name="select_activity">Please select an activity</string>
+    <string name="name_shortcut">Please name this shortcut</string>
 
 </resources>

@@ -44,7 +44,7 @@ public class ActivityBrowser extends Activity {
 
         LinearLayout layout = (LinearLayout) findViewById(R.id.act_llayout); // where items go
 
-        String pkgName = getIntent().getStringExtra("pkgname"); // retrieve the package name we are looking for activities in
+        final String pkgName = getIntent().getStringExtra("pkgname"); // retrieve the package name we are looking for activities in
         Log.d(tag, "pkgname from intent: " + pkgName);
 
         // get activities for this package
@@ -70,7 +70,7 @@ public class ActivityBrowser extends Activity {
 
                     // pass this name back to MainActivity
                     Intent data = new Intent();
-                    data.setData(Uri.parse(name));
+                    data.setData(Uri.parse(pkgName + " " + name));
                     setResult(RESULT_OK, data);
 
                     // close this activity

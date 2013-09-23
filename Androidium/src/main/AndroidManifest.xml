@@ -72,6 +72,11 @@
             android:icon="@drawable/ic_allapps"
             android:name=".AppDrawer">
         </activity>
+        <activity
+            android:name=".NameShortcut"
+            android:theme="@android:style/Theme.Dialog">
+        </activity>
+
     </application>
 
 </manifest>
