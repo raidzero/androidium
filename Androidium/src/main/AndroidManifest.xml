@@ -69,6 +69,7 @@
         <activity
             android:process="com.raidzero.androidium.drawerthread"
             android:theme="@style/AppDrawerAnimation"
+            android:icon="@drawable/ic_allapps"
             android:name=".AppDrawer">
         </activity>
     </application>

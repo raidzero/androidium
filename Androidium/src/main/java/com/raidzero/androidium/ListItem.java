@@ -18,12 +18,12 @@
 
 package com.raidzero.androidium;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
-import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -58,15 +58,7 @@ public class ListItem extends HomeActivity {
 
     public TextView getTextView(Context context, boolean missedNumbersAvailable) {
         TextView retView = (TextView) View.inflate(context, R.layout.list_item, null);
-        if (item_name.equals("phone") && missedCalls > 0 && missedNumbersAvailable) {
-            // add missed calls in superscript
-            retView.setText(Html.fromHtml("phone <sup><small>" + missedCalls + "</small></sup>"));
-        } else if (item_name.equals("messages") && unreadSMS > 0 && missedNumbersAvailable) {
-            // add unread SMS in superscript
-            retView.setText(Html.fromHtml("messages <sup><small>" + unreadSMS + "</small></sup>"));
-        } else {
-            retView.setText(item_name);
-        }
+        retView.setText(item_name);
         return retView;
     }
 
@@ -77,6 +69,11 @@ public class ListItem extends HomeActivity {
     public RelativeLayout getComplexView(Context context, boolean missedNumbersAvailable) {
         RelativeLayout complexView = (RelativeLayout) View.inflate(context, R.layout.complex_list_item, null);
 
+        PackageManager pm = context.getPackageManager();
+        Intent intent = new Intent();
+        intent.setComponent(new ComponentName(pkgName, activityName));
+        ResolveInfo ri = pm.resolveActivity(intent, 0);
+
         // loop through its children
         int numChildren = complexView.getChildCount();
         for (int i=0; i<numChildren; i++) {
@@ -84,29 +81,18 @@ public class ListItem extends HomeActivity {
 
             // is it a text view?
             if (childView instanceof TextView) {
-                if (item_name.equals("phone") && missedCalls > 0 && missedNumbersAvailable) {
-                    // add missed calls in superscript
-                    ((TextView) childView).setText(Html.fromHtml("phone <sup><small>" + missedCalls + "</small></sup>"));
-                } else if (item_name.equals("messages") && unreadSMS > 0 && missedNumbersAvailable) {
-                    // add unread SMS in superscript
-                    ((TextView) childView).setText(Html.fromHtml("messages <sup><small>" + unreadSMS + "</small></sup>"));
-                } else {
-                    ((TextView) childView).setText(item_name);
-                }
                 ((TextView) childView).setText(item_name);
             }
 
             // imageview?
             if (childView instanceof ImageView) {
-
                 // get icon that matches package name
                 try {
-                    PackageManager pm = context.getPackageManager();
-                    ApplicationInfo appInfo = pm.getApplicationInfo(pkgName, 0);
-                    Drawable appIcon = pm.getApplicationIcon(appInfo);
+                    Drawable appIcon = ri.loadIcon(pm);
                     ((ImageView) childView).setImageDrawable(appIcon);
                 } catch (Exception e) {
                     // dont do anything, leave it blank
+                    logWrapper("icon not set: " + e.getMessage());
                 }
 
                 childView.setVisibility(View.GONE);
@@ -118,9 +104,9 @@ public class ListItem extends HomeActivity {
 
     public Intent getLaunchIntent() {
         logWrapper(this.getItemName() + ".getLaunchIntent() called");
-
         Intent launchIntent = new Intent();
         launchIntent.setClassName(pkgName, activityName);
+        logWrapper("getLaunchIntent() returning " + pkgName + "." + activityName);
         return launchIntent;
     }
 }

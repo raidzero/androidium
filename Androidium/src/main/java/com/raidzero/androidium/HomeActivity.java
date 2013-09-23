@@ -208,7 +208,7 @@ public class HomeActivity extends Activity {
             listItems.add(new ListItem("weather", "com.levelup.beautifulwidgets", "com.levelup.beautifulwidgets.full.activities.ForecastActivityFull"));
             listItems.add(new ListItem("applications", "com.raidzero.androidium", "com.raidzero.androidium.AppDrawer"));
             listItems.add(new ListItem("calculator", "com.android.calculator2", "com.android.calculator2.Calculator"));
-            listItems.add(new ListItem("camera", "com.android.gallery3d", "com.android.camera.CameraActivity"));
+            listItems.add(new ListItem("camera", "com.android.gallery3d", "com.android.camera.CameraLauncher"));
             listItems.add(new ListItem("pictures", "com.android.gallery3d", "com.android.gallery3d.app.Gallery"));
             listItems.add(new ListItem("music", "github.daneren2005.dsub", "github.daneren2005.dsub.activity.MainActivity"));
             listItems.add(new ListItem("finances", "com.chase.sig.android", "com.chase.sig.android.activity.HomeActivity"));

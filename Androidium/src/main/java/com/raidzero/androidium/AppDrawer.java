@@ -28,6 +28,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.*;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
@@ -71,9 +72,21 @@ public class AppDrawer extends Activity {
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
                 i.setComponent(name);
 
+                Log.i("launch", name.getPackageName() + "." + name.getClassName());
                 startActivity(i);
             }
         });
+
+        gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            public boolean onItemLongClick(AdapterView<?> parent, View v, int position, long id) {
+                ResolveInfo launchable = adapter.getItem(position);
+                ActivityInfo activity=launchable.activityInfo;
+                ComponentName name=new ComponentName(activity.applicationInfo.packageName, activity.name);
+                Log.i("longClick", "detected: " + name.getClassName());
+                return true;
+            }
+        });
+
     }
 
     class AppAdapter extends ArrayAdapter<ResolveInfo> {
